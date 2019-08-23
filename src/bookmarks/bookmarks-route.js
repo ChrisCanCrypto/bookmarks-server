@@ -50,6 +50,12 @@ function handlePostNewBookmark(req, res, next) {
 		}
 	}
 
+	if (![1, 2, 3, 4, 5].includes(rating)) {
+		return res.status(400).json({
+			error: { message: `Rating must be a number between 1-5. You posted: ${rating}` }
+		});
+	}
+
 	BookmarksService.postNewBookmark(knexInstance, newBookmark)
 		.then(bookmark => {
 			res.status(201)
@@ -74,7 +80,7 @@ function handleFindBookmarkById(req, res, next) {
 }
 
 function handleGetBookmarkById(req, res, next) {
-	res.json(serializeBookmark(bookmark));
+	res.json(serializeBookmark(res.bookmark));
 }
 
 function handleDeleteBookmarkById(req, res) {
