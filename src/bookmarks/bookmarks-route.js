@@ -83,7 +83,7 @@ function handleGetBookmarkById(req, res, next) {
 	res.json(serializeBookmark(res.bookmark));
 }
 
-function handleDeleteBookmarkById(req, res) {
+function handleDeleteBookmarkById(req, res, next) {
 	const knexInstance = req.app.get('db');
 	const { id } = req.params;
 

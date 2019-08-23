@@ -268,75 +268,52 @@ describe('Bookmarks Endpoints', function() {
 			});
 		});
 	});
+
+	//Testing DELETE /bookmarks/:id endpoints
+	describe('DELETE /bookmarks/:id', () => {
+		//Testing valid DELETE
+		context('if the user requests to delete a valid bookmark with proper authorization', () => {
+			const testBookmarks = makeBookmarksArray();
+
+			beforeEach('insert bookmarks', () => {
+				return db.into('bookmarks').insert(testBookmarks);
+			});
+
+			it('should respond with 204 and remove the bookmark', done => {
+				const idToRemove = 2;
+				const expectedBookmarks = testBookmarks.filter(
+					bookmark => bookmark.id !== idToRemove
+				);
+				chai.request(app)
+					.delete(`/bookmarks/${idToRemove}`)
+					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
+					.end((err, res) => {
+						res.should.have.status(204);
+					})
+					.then(res => {
+						chai.request(app)
+							.get('/bookmarks')
+							.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
+							.end((err, res) => {
+								res.body.should.deep.equal(expectedBookmarks);
+								done();
+							});
+					});
+			});
+		});
+
+		//Testing if bookmark doesn't exist
+		context('if the user tries to delete a bookmark with invalid id', () => [
+			it('should respond with 404 & error message', done => {
+				chai.request(app)
+					.delete(`/bookmarks/222222222`)
+					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
+					.end((err, res) => {
+						res.should.have.status(404);
+						res.body.error.message.should.equal(`Bookmark doesn't exist`);
+						done();
+					});
+			})
+		]);
+	});
 });
-
-// describe('/bookmarks', () => {
-// 	it('POST /bookmarks responds with 400 if no title given', done => {
-// 		chai.request(app)
-// 			.post('/bookmarks')
-// 			.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 			.end((err, res) => {
-// 				res.should.have.status(400);
-// 				done();
-// 			});
-// 	});
-// 	it('POST /bookmarks should respond with 201 if new bookmark is added correctly', done => {
-// 		chai.request(app)
-// 			.post('/bookmarks')
-// 			.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 			.send({
-// 				title: 'book',
-// 				url: 'https://www.amazon.com',
-// 				description: "'the book of amazon'",
-// 				rating: 5
-// 			})
-// 			.end((err, res) => {
-// 				res.should.have.status(201);
-// 				done();
-// 			});
-// 	});
-// });
-
-// describe('/bookmarks/:id', () => {
-// 	describe('GET ', () => {
-// 		it('GET /bookmarks/:id should respond with 404 if the bookmark id doesnt exist', done => {
-// 			chai.request(app)
-// 				.get('/bookmarks/eoirhegtiuhe')
-// 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 				.end((err, res) => {
-// 					res.should.have.status(404);
-// 					done();
-// 				});
-// 		});
-// 		it('GET /bookmarks/:id should respond with 200 and the bookmark object', done => {
-// 			chai.request(app)
-// 				.get('/bookmarks/1')
-// 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 				.end((err, res) => {
-// 					res.should.have.status(200);
-// 					res.body.should.be.a('object');
-// 					done();
-// 				});
-// 		});
-// 	});
-// 	describe('DELETE ', () => {
-// 		it('DELETE /bookmarks/:id should respond with 404 if the bookmark id doesnt exist', done => {
-// 			chai.request(app)
-// 				.delete('/bookmarks/eoirhegtiuhe')
-// 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 				.end((err, res) => {
-// 					res.should.have.status(404);
-// 					done();
-// 				});
-// 		});
-// 		it('DELETE /bookmarks/:id should respond with status 204 if the bookmark is successfully deleted', done => {
-// 			chai.request(app)
-// 				.delete('/bookmarks/1')
-// 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 				.end((err, res) => {
-// 					res.should.have.status(204);
-// 					done();
-// 				});
-// 		});
-// 	});
-// });
