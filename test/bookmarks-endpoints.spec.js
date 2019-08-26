@@ -290,7 +290,7 @@ describe('Bookmarks Endpoints', function() {
 				return db.into('bookmarks').insert(testBookmarks);
 			});
 
-			it(`Responds with 204 and updates the bookmark`, done => {
+			it(`Responds with 204 and updates the bookmark with partial updates`, done => {
 				const idToUpdate = 1;
 				const updatedBookmark = {
 					title: 'updated title'
@@ -316,6 +316,24 @@ describe('Bookmarks Endpoints', function() {
 					.send(badUpdatedBookmark)
 					.end((err, res) => {
 						res.should.have.status(400);
+						done();
+					});
+			});
+
+			it(`responds with 204 and updates the bookmark wen everything is updates`, done => {
+				const idToUpdate = 1;
+				const updatedBookmark = {
+					title: 'updated title',
+					rating: 3,
+					description: 'updated desc',
+					url: 'https://www.updated.com'
+				};
+				chai.request(app)
+					.patch(`/api/bookmarks/${idToUpdate}`)
+					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
+					.send(updatedBookmark)
+					.end((err, res) => {
+						res.should.have.status(204);
 						done();
 					});
 			});
