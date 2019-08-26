@@ -181,7 +181,7 @@ describe('Bookmarks Endpoints', function() {
 			it('should respond with 201 and post the new bookmark', done => {
 				chai.request(app)
 					.post('/bookmarks')
-					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
+					.set('Authorization', 'Berer b476ec9a-22d8-4382-969a-064b208823de')
 					.send(newBookmark)
 					.end((err, res) => {
 						res.should.have.status(201);
@@ -241,9 +241,7 @@ describe('Bookmarks Endpoints', function() {
 					.end((err, res) => {
 						res.should.have.status(400);
 						res.body.error.message.should.equal(
-							`Rating must be a number between 1-5. You posted: ${
-								badRatingBookmark.rating
-							}`
+							`Rating must be a number between 1-5. You posted: ${badRatingBookmark.rating}`
 						);
 						done();
 					});

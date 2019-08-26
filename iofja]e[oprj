@@ -1,0 +1,53 @@
+[33mcommit e70a35a1e4cbfec866e3afe72ae26f102f0c35ef[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/post_delete[m[33m, [m[1;31morigin/master[m[33m, [m[1;32mpost_delete[m[33m)[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 23 22:50:35 2019 +0000
+
+    added tests for DELETE /bookmarks/:id
+
+[33mcommit 10f83805bf4689ec8b5cf9c2a22f4dd6c9d5c1f8[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 23 22:31:37 2019 +0000
+
+    refactored GET testing endpoints and POST testing endpoints
+
+[33mcommit 7cde2a96cc0d4a2b53216d887f38626ff7c14efd[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 23 20:56:40 2019 +0000
+
+    created the endpoints and functions for the refactored bookmarks db. Organized the validations. Added xss for json sterilazation
+
+[33mcommit 55f8194d7ee80e91de853436b9c96340603dd384[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 23 00:17:35 2019 +0000
+
+    connected the database and tests for localhosting
+
+[33mcommit 89044e278d144895df062deb072b2425be7760c3[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 16 16:47:55 2019 -0700
+
+    Added functionallity and tests for GET /bookmarks POST /bookmarks GET /bookmarks/:id DELETE /bookmarks/:id
+
+[33mcommit a6ae2de132c06d3466be9a531d0b78e50cd2d633[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 16 15:45:34 2019 -0700
+
+    setup get /bookmarks endpoint and test
+
+[33mcommit 4936127311299338a0ef34d7b17c27035d432b85[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 16 14:33:50 2019 -0700
+
+    added tests for authorized and unauthorized get / attempts
+
+[33mcommit 9c4e39149011ef619e751de8d99f2520937a0ea0[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 16 14:06:10 2019 -0700
+
+    added authorization middlewear
+
+[33mcommit e10f2b50361da635d1c046c12c6368257bb330ff[m
+Author: Chris Wysocki <christopher.wysocki@gmail.com>
+Date:   Fri Aug 16 13:59:49 2019 -0700
+
+    basic app setup with winston & uuid installed
