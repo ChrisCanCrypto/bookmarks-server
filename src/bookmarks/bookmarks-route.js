@@ -25,7 +25,8 @@ bookmarksRouter
 	.route('/:id')
 	.all(handleFindBookmarkById)
 	.get(handleGetBookmarkById)
-	.delete(handleDeleteBookmarkById);
+	.delete(handleDeleteBookmarkById)
+	.patch(bodyParser, handlePatchBookmarkById);
 
 //Endpoint Functions
 function handleGetBookmarks(req, res, next) {
@@ -89,6 +90,29 @@ function handleDeleteBookmarkById(req, res) {
 
 	BookmarksService.deleteBookmark(knexInstance, id)
 		.then(() => {
+			res.status(204).end();
+		})
+		.catch(next);
+}
+
+function handlePatchBookmarkById(req, res, next) {
+	const knexInstance = req.app.get('db');
+	const { id } = req.params;
+	const { title, url, description, rating } = req.body;
+	const bookmarkToUpdate = { title, url, description, rating };
+
+	const numberOfValues = Object.values(bookmarkToUpdate).filter(Boolean).length;
+	if (numberOfValues === 0) {
+		return res.status(400).json({
+			error: {
+				message:
+					'Request body must contain either `title`, `url`, `description`, or `rating`'
+			}
+		});
+	}
+
+	BookmarksService.updateBookmark(knexInstance, id, bookmarkToUpdate)
+		.then(numRowsAffected => {
 			res.status(204).end();
 		})
 		.catch(next);

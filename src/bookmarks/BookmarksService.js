@@ -25,6 +25,12 @@ const BookmarksService = {
 		return knex('bookmarks')
 			.where({ id })
 			.delete();
+	},
+
+	updateBookmark(knex, id, newBookmarkField) {
+		return knex('bookmarks')
+			.where({ id })
+			.update(newBookmarkField);
 	}
 };
 

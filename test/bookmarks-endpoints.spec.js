@@ -133,7 +133,7 @@ describe('Bookmarks Endpoints', function() {
 	describe('GET /api/bookmarks/:id', () => {
 		const testBookmarks = makeBookmarksArray();
 
-		beforeEach('insert articles', () => {
+		beforeEach('insert bookmarks', () => {
 			return db.into('bookmarks').insert(testBookmarks);
 		});
 
@@ -266,75 +266,59 @@ describe('Bookmarks Endpoints', function() {
 			});
 		});
 	});
+
+	//Testing PATCH /api/bookmarks/:id endpoints
+	describe('PATCH /api/bookmarks/:id', () => {
+		//Given no bookmarks
+		context(`Given no bookmarks`, () => {
+			it(`responds with 404`, done => {
+				chai.request(app)
+					.patch('/api/bookmarks/7')
+					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
+					.end((err, res) => {
+						res.should.have.status(404);
+						done();
+					});
+			});
+		});
+
+		//Given bookmarks
+		context(`Given there are bookmarks in the db`, () => {
+			const testBookmarks = makeBookmarksArray();
+
+			beforeEach('insert bookmarks', () => {
+				return db.into('bookmarks').insert(testBookmarks);
+			});
+
+			it(`Responds with 204 and updates the bookmark`, done => {
+				const idToUpdate = 1;
+				const updatedBookmark = {
+					title: 'updated title'
+				};
+				chai.request(app)
+					.patch(`/api/bookmarks/${idToUpdate}`)
+					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
+					.send(updatedBookmark)
+					.end((err, res) => {
+						res.should.have.status(204);
+						done();
+					});
+			});
+
+			it(`Responds with 400 when no required fields are supplied`, done => {
+				const idToUpdate = 1;
+				const badUpdatedBookmark = {
+					useless: 'This should not work'
+				};
+				chai.request(app)
+					.patch(`/api/bookmarks/${idToUpdate}`)
+					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
+					.send(badUpdatedBookmark)
+					.end((err, res) => {
+						res.should.have.status(400);
+						done();
+					});
+			});
+		});
+	});
 });
-
-// describe('/api/bookmarks', () => {
-// 	it('POST /api/bookmarks responds with 400 if no title given', done => {
-// 		chai.request(app)
-// 			.post('/api/bookmarks')
-// 			.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 			.end((err, res) => {
-// 				res.should.have.status(400);
-// 				done();
-// 			});
-// 	});
-// 	it('POST /api/bookmarks should respond with 201 if new bookmark is added correctly', done => {
-// 		chai.request(app)
-// 			.post('/api/bookmarks')
-// 			.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 			.send({
-// 				title: 'book',
-// 				url: 'https://www.amazon.com',
-// 				description: "'the book of amazon'",
-// 				rating: 5
-// 			})
-// 			.end((err, res) => {
-// 				res.should.have.status(201);
-// 				done();
-// 			});
-// 	});
-// });
-
-// describe('/api/bookmarks/:id', () => {
-// 	describe('GET ', () => {
-// 		it('GET /api/bookmarks/:id should respond with 404 if the bookmark id doesnt exist', done => {
-// 			chai.request(app)
-// 				.get('/api/bookmarks/eoirhegtiuhe')
-// 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 				.end((err, res) => {
-// 					res.should.have.status(404);
-// 					done();
-// 				});
-// 		});
-// 		it('GET /api/bookmarks/:id should respond with 200 and the bookmark object', done => {
-// 			chai.request(app)
-// 				.get('/api/bookmarks/1')
-// 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 				.end((err, res) => {
-// 					res.should.have.status(200);
-// 					res.body.should.be.a('object');
-// 					done();
-// 				});
-// 		});
-// 	});
-// 	describe('DELETE ', () => {
-// 		it('DELETE /api/bookmarks/:id should respond with 404 if the bookmark id doesnt exist', done => {
-// 			chai.request(app)
-// 				.delete('/api/bookmarks/eoirhegtiuhe')
-// 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 				.end((err, res) => {
-// 					res.should.have.status(404);
-// 					done();
-// 				});
-// 		});
-// 		it('DELETE /api/bookmarks/:id should respond with status 204 if the bookmark is successfully deleted', done => {
-// 			chai.request(app)
-// 				.delete('/api/bookmarks/1')
-// 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
-// 				.end((err, res) => {
-// 					res.should.have.status(204);
-// 					done();
-// 				});
-// 		});
-// 	});
-// });
