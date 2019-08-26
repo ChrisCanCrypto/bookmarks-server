@@ -29,9 +29,9 @@ describe('Bookmarks Endpoints', function() {
 			return db.into('bookmarks').insert(testBookmarks);
 		});
 
-		it('responds with 401 for GET /bookmarks', done => {
+		it('responds with 401 for GET /api/bookmarks', done => {
 			chai.request(app)
-				.get('/bookmarks')
+				.get('/api/bookmarks')
 				.end((err, res) => {
 					res.should.have.status(401);
 					res.body.error.should.equal('Unauthorized request');
@@ -39,9 +39,9 @@ describe('Bookmarks Endpoints', function() {
 				});
 		});
 
-		it('responds with 401 for GET /bookmarks/:id', done => {
+		it('responds with 401 for GET /api/bookmarks/:id', done => {
 			chai.request(app)
-				.get('/bookmarks/1')
+				.get('/api/bookmarks/1')
 				.end((err, res) => {
 					res.should.have.status(401);
 					res.body.error.should.equal('Unauthorized request');
@@ -49,9 +49,9 @@ describe('Bookmarks Endpoints', function() {
 				});
 		});
 
-		it('responds with 401 for DELETE /bookmarks/:id', done => {
+		it('responds with 401 for DELETE /api/bookmarks/:id', done => {
 			chai.request(app)
-				.delete('/bookmarks/1')
+				.delete('/api/bookmarks/1')
 				.end((err, res) => {
 					res.should.have.status(401);
 					res.body.error.should.equal('Unauthorized request');
@@ -59,9 +59,9 @@ describe('Bookmarks Endpoints', function() {
 				});
 		});
 
-		it('responds with 401 for POST /bookmarks', done => {
+		it('responds with 401 for POST /api/bookmarks', done => {
 			chai.request(app)
-				.post('/bookmarks/1')
+				.post('/api/bookmarks/1')
 				.end((err, res) => {
 					res.should.have.status(401);
 					res.body.error.should.equal('Unauthorized request');
@@ -70,13 +70,13 @@ describe('Bookmarks Endpoints', function() {
 		});
 	});
 
-	//Testing GET /bookmarks endpoints
-	describe('GET /bookmarks', () => {
+	//Testing GET /api/bookmarks endpoints
+	describe('GET /api/bookmarks', () => {
 		//Testing with no bookmarks in the db
 		context('given there are no bookmarks in the db', () => {
 			it('responds with 200 and an empty list', done => {
 				chai.request(app)
-					.get('/bookmarks')
+					.get('/api/bookmarks')
 					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 					.end((err, res) => {
 						res.should.have.status(200);
@@ -95,7 +95,7 @@ describe('Bookmarks Endpoints', function() {
 
 			it('responds with 200 and a list of bookmarks', done => {
 				chai.request(app)
-					.get('/bookmarks')
+					.get('/api/bookmarks')
 					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 					.end((err, res) => {
 						res.should.have.status(200);
@@ -118,7 +118,7 @@ describe('Bookmarks Endpoints', function() {
 
 			it('removes XSS attack content', done => {
 				chai.request(app)
-					.get('/bookmarks')
+					.get('/api/bookmarks')
 					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 					.end((err, res) => {
 						res.body[0].title.should.equal(expectedBookmark.title);
@@ -129,8 +129,8 @@ describe('Bookmarks Endpoints', function() {
 		});
 	});
 
-	//Testing GET /bookmarks/:id endpoints
-	describe('GET /bookmarks/:id', () => {
+	//Testing GET /api/bookmarks/:id endpoints
+	describe('GET /api/bookmarks/:id', () => {
 		const testBookmarks = makeBookmarksArray();
 
 		beforeEach('insert articles', () => {
@@ -141,7 +141,7 @@ describe('Bookmarks Endpoints', function() {
 		context(`Given an id that doesn't exist`, () => {
 			it('should respond with 404', done => {
 				chai.request(app)
-					.get('/bookmarks/77777')
+					.get('/api/bookmarks/77777')
 					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 					.end((err, res) => {
 						res.should.have.status(404);
@@ -156,7 +156,7 @@ describe('Bookmarks Endpoints', function() {
 				const bookmarkId = 2;
 				const expectedBookmark = testBookmarks[bookmarkId - 1];
 				chai.request(app)
-					.get(`/bookmarks/${bookmarkId}`)
+					.get(`/api/bookmarks/${bookmarkId}`)
 					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 					.end((err, res) => {
 						res.should.have.status(200);
@@ -167,8 +167,8 @@ describe('Bookmarks Endpoints', function() {
 		});
 	});
 
-	//Testing POST /bookmarks endpoints
-	describe(`POST /bookmarks`, () => {
+	//Testing POST /api/bookmarks endpoints
+	describe(`POST /api/bookmarks`, () => {
 		//Testing valid bookmark post
 		context('If bookmark is valid', () => {
 			const newBookmark = {
@@ -180,7 +180,7 @@ describe('Bookmarks Endpoints', function() {
 
 			it('should respond with 201 and post the new bookmark', done => {
 				chai.request(app)
-					.post('/bookmarks')
+					.post('/api/bookmarks')
 					.set('Authorization', 'Berer b476ec9a-22d8-4382-969a-064b208823de')
 					.send(newBookmark)
 					.end((err, res) => {
@@ -210,7 +210,7 @@ describe('Bookmarks Endpoints', function() {
 					delete newBookmark[field];
 
 					chai.request(app)
-						.post('/bookmarks')
+						.post('/api/bookmarks')
 						.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 						.send(newBookmark)
 						.end((err, res) => {
@@ -235,7 +235,7 @@ describe('Bookmarks Endpoints', function() {
 
 			it('responds with 400 and an error message', done => {
 				chai.request(app)
-					.post('/bookmarks')
+					.post('/api/bookmarks')
 					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 					.send(badRatingBookmark)
 					.end((err, res) => {
@@ -254,7 +254,7 @@ describe('Bookmarks Endpoints', function() {
 
 			it('remove xss content from the response', done => {
 				chai.request(app)
-					.post('/bookmarks')
+					.post('/api/bookmarks')
 					.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 					.send(maliciousBookmark)
 					.end((err, res) => {
@@ -268,19 +268,19 @@ describe('Bookmarks Endpoints', function() {
 	});
 });
 
-// describe('/bookmarks', () => {
-// 	it('POST /bookmarks responds with 400 if no title given', done => {
+// describe('/api/bookmarks', () => {
+// 	it('POST /api/bookmarks responds with 400 if no title given', done => {
 // 		chai.request(app)
-// 			.post('/bookmarks')
+// 			.post('/api/bookmarks')
 // 			.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 // 			.end((err, res) => {
 // 				res.should.have.status(400);
 // 				done();
 // 			});
 // 	});
-// 	it('POST /bookmarks should respond with 201 if new bookmark is added correctly', done => {
+// 	it('POST /api/bookmarks should respond with 201 if new bookmark is added correctly', done => {
 // 		chai.request(app)
-// 			.post('/bookmarks')
+// 			.post('/api/bookmarks')
 // 			.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 // 			.send({
 // 				title: 'book',
@@ -295,20 +295,20 @@ describe('Bookmarks Endpoints', function() {
 // 	});
 // });
 
-// describe('/bookmarks/:id', () => {
+// describe('/api/bookmarks/:id', () => {
 // 	describe('GET ', () => {
-// 		it('GET /bookmarks/:id should respond with 404 if the bookmark id doesnt exist', done => {
+// 		it('GET /api/bookmarks/:id should respond with 404 if the bookmark id doesnt exist', done => {
 // 			chai.request(app)
-// 				.get('/bookmarks/eoirhegtiuhe')
+// 				.get('/api/bookmarks/eoirhegtiuhe')
 // 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 // 				.end((err, res) => {
 // 					res.should.have.status(404);
 // 					done();
 // 				});
 // 		});
-// 		it('GET /bookmarks/:id should respond with 200 and the bookmark object', done => {
+// 		it('GET /api/bookmarks/:id should respond with 200 and the bookmark object', done => {
 // 			chai.request(app)
-// 				.get('/bookmarks/1')
+// 				.get('/api/bookmarks/1')
 // 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 // 				.end((err, res) => {
 // 					res.should.have.status(200);
@@ -318,18 +318,18 @@ describe('Bookmarks Endpoints', function() {
 // 		});
 // 	});
 // 	describe('DELETE ', () => {
-// 		it('DELETE /bookmarks/:id should respond with 404 if the bookmark id doesnt exist', done => {
+// 		it('DELETE /api/bookmarks/:id should respond with 404 if the bookmark id doesnt exist', done => {
 // 			chai.request(app)
-// 				.delete('/bookmarks/eoirhegtiuhe')
+// 				.delete('/api/bookmarks/eoirhegtiuhe')
 // 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 // 				.end((err, res) => {
 // 					res.should.have.status(404);
 // 					done();
 // 				});
 // 		});
-// 		it('DELETE /bookmarks/:id should respond with status 204 if the bookmark is successfully deleted', done => {
+// 		it('DELETE /api/bookmarks/:id should respond with status 204 if the bookmark is successfully deleted', done => {
 // 			chai.request(app)
-// 				.delete('/bookmarks/1')
+// 				.delete('/api/bookmarks/1')
 // 				.set('Authorization', 'Bearer b476ec9a-22d8-4382-969a-064b208823de')
 // 				.end((err, res) => {
 // 					res.should.have.status(204);

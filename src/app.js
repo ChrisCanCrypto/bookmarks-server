@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 	res.send('Hello, bookmarks!');
 });
 
-app.use('/bookmarks', bookmarksRouter);
+app.use('/api/bookmarks', bookmarksRouter);
 
 // Error handling
 app.use(function errorHandler(error, req, res, next) {
